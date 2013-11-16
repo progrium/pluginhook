@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"log"
 	"flag"
+	"os/signal"
 	"code.google.com/p/go.crypto/ssh/terminal"
 )
 
@@ -24,6 +25,10 @@ func main() {
 		log.Fatal("[ERROR] Hook name argument is required\n")
 		os.Exit(1)
 	}
+
+	// Ignore signals. They are sent to the child process anyway. Just wait for the hooks to stop
+	sigc := make(chan os.Signal)
+	signal.Notify(sigc, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 
 	var matches, _ = filepath.Glob(fmt.Sprintf("%s/*/%s", pluginPath, flag.Arg(0)))
 
