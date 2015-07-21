@@ -61,6 +61,8 @@ func main() {
 		}
 	}
 
+        os.Setenv("PLUGINHOOK_COMMAND_COUNT", fmt.Sprintf("%d", len(cmds)))
+
 	if *parallel {
 		done := make(chan bool, len(cmds))
 
